@@ -21,16 +21,27 @@ class Board(object):
         if city_name not in self.name_node_map:
             return False
         node = self.name_node_map[city_name]
-        if player in self.graph.node[node]['houses']:
+        if player.color in self.graph.node[node]['houses']:
             return False
         if len(self.graph.node[node]['houses']) >= 3:
             return False
-        self.graph.node[node]['houses'].add(player)
+        self.graph.node[node]['houses'].add(player.color)
         return True
 
+    def clear_board(self):
+        for node in self.graph.nodes():
+            self.graph.node[node]['houses'] = set()
+
     def get_cost(self, player, cities):
+        if not cities:
+            return 0, []
+
         # get cities with player houses
         player_nodes = [n[0] for n in self.graph.nodes(data=True) if player in n[1]['houses']]
+        if not player_nodes:
+            # player has no houses yet, pick a city to start
+            player_nodes = [self.name_node_map[cities[0]]]
+
         # get requested city nodes
         city_nodes = {self.name_node_map[city]: city for city in cities}
 
@@ -57,4 +68,15 @@ class Board(object):
             city = city_nodes[min_city]
             del city_nodes[min_city]
             cities.remove(city)
+            player_nodes.append(min_city)
         return total_cost, build_paths
+
+    def get_board_info(self):
+        info = {"cities": []}
+        cities = list(self.name_node_map.items())
+        cities.sort(key=lambda x: self.graph.node[x[1]]['region'])
+
+        for city, city_node in cities:
+            node = self.graph.node[city_node]
+            info['cities'].append({'name': city, 'houses': list(node['houses']), 'region_color': node['region']})
+        return info

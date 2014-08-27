@@ -1,6 +1,6 @@
 import json
 
-PLAYER_IDS = set(zip(range(6), ['RED', 'YELLOW', 'GREEN', 'BLUE', 'BLACK', 'PURPLE']))
+PLAYER_IDS = set(zip(range(6), ['red', 'yellow', 'green', 'blue', 'black', 'purple']))
 
 
 class Player(object):

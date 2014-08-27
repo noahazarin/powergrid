@@ -1,6 +1,6 @@
 import os.path
 
-from . import board
+import board
 
 HERE = os.path.dirname(__file__)
 
@@ -8,8 +8,8 @@ HERE = os.path.dirname(__file__)
 class Game(object):
     def __init__(self, board_name):
         self.players = []
-        self.load_board(board_name)
         self.board = None
+        self.load_board(board_name)
 
     def add_player(self, newplayer):
         self.players.append(newplayer)

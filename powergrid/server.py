@@ -5,8 +5,8 @@ from tornado.ioloop import IOLoop
 from tornado.web import Application, url, RequestHandler
 from tornado.websocket import WebSocketHandler
 
-from . import game
-from . import player
+import game
+import player
 
 
 HERE = os.path.dirname(__file__)
@@ -28,16 +28,53 @@ class PlayerHandler(WebSocketHandler):
         msg = json.loads(msg)
         if msg['type'] == "CONNECT":
             self.handle_connect()
+        elif msg['type'] == "COSTREQUEST":
+            self.handle_costrequest(msg)
+        elif msg['type'] == "PURCHASE":
+            self.handle_purchase(msg)
+        elif msg['type'] == "CLEARBOARD":
+            self.handle_clearboard(msg)
 
     def handle_connect(self):
         # send current player info
         self.player.notify("YOURPLAYER", {'name': self.player.name,
                                           'color': self.player.color})
+
+        self.player.notify("BOARDINFO", PlayerHandler.game.board.get_board_info())
+
         # send other player info
         for other in PlayerHandler.game.players:
             if other != self.player:
                 self.player.notify("NEWPLAYER", {'name': other.name,
                                                  'color': other.color})
+
+
+    def handle_costrequest(self, msg):
+        cost, paths = self.game.board.get_cost(msg['body']['player'], msg['body']['cities'])
+        self.player.notify("COSTRESULT", {'cost': cost})
+
+    def handle_purchase(self, msg):
+        cities = msg['body']['cities']
+        result = {'purchased': [],
+                  'error': ''}
+        for city in cities:
+            try:
+                PlayerHandler.game.board.add_house(city, self.player)
+                result['purchased'].append(city)
+            except:
+                result['error'] = 'failed to purchase house'
+
+        self.player.notify("PURCHASERESULT", result)
+        # notify all players of new board state
+        board_info = PlayerHandler.game.board.get_board_info()
+        for p in PlayerHandler.game.players:
+            p.notify("BOARDINFO", board_info)
+
+    def handle_clearboard(self, msg):
+        self.game.board.clear_board()
+        board_info = PlayerHandler.game.board.get_board_info()
+        for p in PlayerHandler.game.players:
+            p.notify("BOARDINFO", board_info)
 
     def on_close(self):
         self.player.destroy()
