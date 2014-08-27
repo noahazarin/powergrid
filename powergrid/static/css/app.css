@@ -1,0 +1,17 @@
+li:before {
+    content: " ";
+    height: 10px;
+    width: 10px;
+    display: inline-block;
+}
+
+li.player-RED:before { background: #c00; }
+li.player-GREEN:before { background: #0c0; }
+li.player-BLUE:before { background: #00c; }
+li.player-YELLOW:before { background: yellow; }
+li.player-BLACK:before { background: black; }
+li.player-PURPLE:before { background: purple; }
+
+#playerlist {
+    list-style-type: none;
+}
