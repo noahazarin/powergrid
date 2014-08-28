@@ -15,7 +15,7 @@ class Board(object):
         self.all_costs = networkx.all_pairs_dijkstra_path_length(self.graph)
         # add blank houses set to each node
         for node in self.graph.nodes():
-            self.graph.node[node]['houses'] = set()
+            self.graph.node[node]['houses'] = []
 
     def add_house(self, city_name, player):
         if city_name not in self.name_node_map:
@@ -25,12 +25,12 @@ class Board(object):
             return False
         if len(self.graph.node[node]['houses']) >= 3:
             return False
-        self.graph.node[node]['houses'].add(player.color)
+        self.graph.node[node]['houses'].append(player.color)
         return True
 
     def clear_board(self):
         for node in self.graph.nodes():
-            self.graph.node[node]['houses'] = set()
+            self.graph.node[node]['houses'] = []
 
     def get_cost(self, player, cities):
         if not cities:
