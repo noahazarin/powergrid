@@ -34,6 +34,10 @@ class PlayerHandler(WebSocketHandler):
             self.handle_purchase(msg)
         elif msg['type'] == "CLEARBOARD":
             self.handle_clearboard(msg)
+        elif msg['type'] == "REQUESTCOLORS":
+            self.handle_requestcolors(msg)
+        elif msg['type'] == "CHANGECOLOR":
+            self.handle_changecolor(msg)
 
     def handle_connect(self):
         # send current player info
@@ -75,6 +79,20 @@ class PlayerHandler(WebSocketHandler):
         board_info = PlayerHandler.game.board.get_board_info()
         for p in PlayerHandler.game.players:
             p.notify("BOARDINFO", board_info)
+
+    def handle_requestcolors(self, msg):
+        available = list(player.PLAYER_COLORS)
+        self.player.notify("COLORSAVAILABLE", available)
+
+    def handle_changecolor(self, msg):
+        color = msg['body'][0]
+        self.player.change_color(color)
+        for other in PlayerHandler.game.players:
+            if other != self.player:
+                other.notify("DEADPLAYER", self.player.name)
+                other.notify("NEWPLAYER", self.player.name)
+        self.player.notify("YOURPLAYER", {"name": self.player.name,
+                                          "color": self.player.color})
 
     def on_close(self):
         self.player.destroy()

@@ -110,3 +110,7 @@ div.house-purple {
     background: purple;
     display: inline-block;
 }
+
+#coloroptions {
+    width: 100px;
+}

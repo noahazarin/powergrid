@@ -5,6 +5,8 @@ $(function() {
     var player_color = "";
     var button_submit = $('#btn-submit');
     var button_clear = $('#btn-clear');
+    var button_change_color = $('#btn-change-color');
+    var button_accept_color = $('#btn-choose-color');
 
 	var setupWs = function() {
 	    var l = window.location;
@@ -24,11 +26,15 @@ $(function() {
 	};
 
 	var handle_yourplayer = function(msg) {
-	    $('#playerlist').append($('<li/>', {
-		id: msg.body.name.replace(" ", "-"),
-		text: ' (You) ' + msg.body.name
-	    }).addClass('player-'+msg.body.color));
-	    player_color = msg.body.color
+	    $('#color-modal').modal('hide');
+	    $('#playerlist').children().first().remove();
+	    $('#playerlist').prepend($('<li/>', {
+		    id: msg.body.name.replace(" ", "-"),
+		    text: ' (You) ' + msg.body.name
+	        }).addClass('player-'+msg.body.color));
+	    $('.house-'+player_color+'.interactable').removeClass('house-'+player_color).addClass('house-'+msg.body.color);
+	    player_color = msg.body.color;
+
 	};
 
 	var handle_boardinfo = function(msg) {
@@ -137,6 +143,9 @@ $(function() {
 		case "PURCHASERESULT":
 		  handle_purchaseresult(msg);
 		  break;
+		case "COLORSAVAILABLE":
+		  handle_colorsavailable(msg);
+		  break;
 	    };
 	    console.log(msg);
 	};
@@ -170,6 +179,39 @@ $(function() {
     }
 
     button_clear.click(clear_board);
+
+    var change_color = function() {
+        ws.send(JSON.stringify({"type": "REQUESTCOLORS",
+                                "body": ""}));
+    }
+
+    button_change_color.click(change_color);
+
+    var handle_colorsavailable = function(msg) {
+        var first = true;
+        $('#coloroptions').empty();
+        $.each(msg.body, function(i, item) {
+            var option = $("<option/>", {value: item}).text(item);
+            if (first) {
+                option.prop('selected', true);
+            }
+            $('#coloroptions').append($("<option\>", {value: item})
+            .text(item));
+        });
+        $('#color-modal').modal('show');
+    }
+
+    var accept_color = function() {
+        color_chosen = $("#coloroptions").val();
+        if (!color_chosen) {
+            $("#color-modal").modal('hide');
+            return;
+        }
+        ws.send(JSON.stringify({"type": "CHANGECOLOR",
+                                "body": color_chosen}))
+    }
+
+    button_accept_color.click(accept_color);
 
 	return;
     })();

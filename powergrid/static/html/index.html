@@ -3,6 +3,26 @@
 {% block title %}Power Grid City Tracker{% end %}
 
 {% block body %}
+<div class="modal fade" id="color-modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;
+                </span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">Choose new color</h4>
+            </div>
+            <div class="modal-body">
+                <select multiple id="coloroptions">
+                </select>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="btn-choose-color">Accept</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="col-md-4">
 <h3>Pending Purchase</h3>
     <ul id="pendinglist" class="list-unstyled"></ul>
@@ -20,6 +40,8 @@
         <ul id='playerlist' class="list-unstyled">
         </ul>
     </div>
+
+    <button id="btn-change-color" type="button" class="btn btn-default">Change Color</button>
 </div>
 
 {% end %}
