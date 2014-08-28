@@ -34,7 +34,7 @@ class Board(object):
 
     def get_cost(self, player, cities):
         if not cities:
-            return 0, []
+            return 0, 0, 0, []
 
         # get cities with player houses
         player_nodes = [n[0] for n in self.graph.nodes(data=True) if player in n[1]['houses']]
@@ -45,7 +45,8 @@ class Board(object):
         # get requested city nodes
         city_nodes = {self.name_node_map[city]: city for city in cities}
 
-        total_cost = 0
+        path_costs = 0
+        house_costs = 0
         build_paths = []
 
         # find the cheapest cities to move to, one by one
@@ -62,14 +63,16 @@ class Board(object):
                     min_player = player_node
 
             # found cheapest city to place
-            total_cost += min_
+            path_costs += min_
             build_paths.append(self.all_paths[min_player][min_city])
-            total_cost += [10, 15, 20][len(self.graph.node[min_city]['houses'])]
+            house_costs += [10, 15, 20][len(self.graph.node[min_city]['houses'])]
             city = city_nodes[min_city]
             del city_nodes[min_city]
             cities.remove(city)
             player_nodes.append(min_city)
-        return total_cost, build_paths
+
+        total_cost = house_costs + path_costs
+        return total_cost, house_costs, path_costs, build_paths
 
     def get_board_info(self):
         info = {"cities": []}

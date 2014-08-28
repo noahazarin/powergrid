@@ -54,8 +54,10 @@ class PlayerHandler(WebSocketHandler):
 
 
     def handle_costrequest(self, msg):
-        cost, paths = self.game.board.get_cost(msg['body']['player'], msg['body']['cities'])
-        self.player.notify("COSTRESULT", {'cost': cost})
+        total, houses, paths_cost, paths = self.game.board.get_cost(msg['body']['player'], msg['body']['cities'])
+        self.player.notify("COSTRESULT", {'cost': total,
+                                          'houses': houses,
+                                          'paths': paths_cost})
 
     def handle_purchase(self, msg):
         cities = msg['body']['cities']
@@ -85,12 +87,16 @@ class PlayerHandler(WebSocketHandler):
         self.player.notify("COLORSAVAILABLE", available)
 
     def handle_changecolor(self, msg):
+        old_color = self.player.color
+        old_name = self.player.name
         color = msg['body'][0]
         self.player.change_color(color)
         for other in PlayerHandler.game.players:
             if other != self.player:
-                other.notify("DEADPLAYER", self.player.name)
-                other.notify("NEWPLAYER", self.player.name)
+                other.notify("DEADPLAYER", {'name': old_name,
+                                            'color': old_color})
+                other.notify("NEWPLAYER", {'name': self.player.name,
+                                           'color': self.player.color})
         self.player.notify("YOURPLAYER", {"name": self.player.name,
                                           "color": self.player.color})
 

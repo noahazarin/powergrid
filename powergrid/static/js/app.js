@@ -113,7 +113,11 @@ $(function() {
 
 	var handle_costresult = function(msg) {
 	    var cost = msg.body.cost;
-	    $('#cost').html("Cost: "+String(cost));
+	    var house = msg.body.houses;
+	    var path = msg.body.paths;
+	    $('#housecost').html("Houses: "+String(house));
+	    $('#pathcost').html("Connection: "+String(path));
+	    $('#cost').html("Total Cost: "+String(cost));
 	}
 
 	var ws = setupWs();
