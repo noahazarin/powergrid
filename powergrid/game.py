@@ -14,10 +14,15 @@ class Game(object):
     def add_player(self, newplayer):
         self.players.append(newplayer)
         # broadcast
+        newplayer.notify("YOURPLAYER", {'name': newplayer.name,
+                                        'color': newplayer.color})
+        newplayer.notify("BOARDINFO", self.board.get_board_info())
         for player in self.players:
             if player != newplayer:
                 player.notify("NEWPLAYER", {'name': newplayer.name,
                                             'color': newplayer.color})
+                newplayer.notify("NEWPLAYER", {'name': player.name,
+                                               'color': player.color})
 
     def remove_player(self, oldplayer):
         self.players.remove(oldplayer)

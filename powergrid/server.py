@@ -16,13 +16,7 @@ class PlayerHandler(WebSocketHandler):
     game = game.Game("america")
 
     def open(self):
-        try:
-            # noinspection PyAttributeOutsideInit
-            self.player = player.Player(self)
-        except ValueError:
-            self.close(reason='too many players')
-
-        PlayerHandler.game.add_player(self.player)
+        pass
 
     def on_message(self, msg):
         msg = json.loads(msg)
@@ -40,17 +34,13 @@ class PlayerHandler(WebSocketHandler):
             self.handle_changecolor(msg)
 
     def handle_connect(self):
-        # send current player info
-        self.player.notify("YOURPLAYER", {'name': self.player.name,
-                                          'color': self.player.color})
+        try:
+            # noinspection PyAttributeOutsideInit
+            self.player = player.Player(self)
+        except ValueError:
+            self.close(reason='too many players')
 
-        self.player.notify("BOARDINFO", PlayerHandler.game.board.get_board_info())
-
-        # send other player info
-        for other in PlayerHandler.game.players:
-            if other != self.player:
-                self.player.notify("NEWPLAYER", {'name': other.name,
-                                                 'color': other.color})
+        PlayerHandler.game.add_player(self.player)
 
 
     def handle_costrequest(self, msg):
