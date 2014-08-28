@@ -37,8 +37,8 @@ li.city-yellow {
 }
 
 div.house-blank {
-    height: 20px;
-    width: 20px;
+    height: 35px;
+    width: 35px;
     outline: black solid thin;
     margin: 4px;
     display:inline-block;
@@ -47,9 +47,9 @@ div.house-blank {
 }
 
 div.house-blank-purchaseable {
-    height: 20px;
-    width: 20px;
-    outline: gold solid thin;
+    height: 35px;
+    width: 35px;
+    outline: gold solid thick;
     margin: 4px;
     display:inline-block;
     background: white;
@@ -62,8 +62,8 @@ div.interactable {
 }
 
 div.house-red {
-    height: 20px;
-    width: 20px;
+    height: 35px;
+    width: 35px;
     outline: black solid thin;
     margin: 4px;
     display: inline-block;
@@ -72,40 +72,40 @@ div.house-red {
 }
 
 div.house-green {
-    height: 20px;
-    width: 20px;
+    height: 35px;
+    width: 35px;
     margin: 4px;
     background: #0c0;
     display: inline-block;
 }
 
 div.house-blue {
-    height: 20px;
-    width: 20px;
+    height: 35px;
+    width: 35px;
     margin: 4px;
     background: #00c;
     display: inline-block;
 }
 
 div.house-yellow {
-    height: 20px;
-    width: 20px;
+    height: 35px;
+    width: 35px;
     margin: 4px;
     background: yellow;
     display: inline-block;
 }
 
 div.house-black {
-    height: 20px;
-    width: 20px;
+    height: 35px;
+    width: 35px;
     margin: 4px;
     background: black;
     display: inline-block;
 }
 
 div.house-purple {
-    height: 20px;
-    width: 20px;
+    height: 35px;
+    width: 35px;
     margin: 4px;
     background: purple;
     display: inline-block;
