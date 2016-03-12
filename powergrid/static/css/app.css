@@ -12,6 +12,10 @@ li.player-yellow:before { background: yellow; }
 li.player-black:before { background: black; }
 li.player-purple:before { background: purple; }
 
+li.city-pink {
+    background: #ffd1dc;
+}
+
 li.city-green {
     background: #dff0d8;
 }
@@ -21,7 +25,7 @@ li.city-red {
 }
 
 li.city-purple {
-    background: #EBD6FF;
+    background: #b19cd9;
 }
 
 li.city-brown {

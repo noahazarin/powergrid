@@ -15,7 +15,7 @@ $ pip install -r requirements.txt
 Once you have the dependencies installed:
 
 ```bash
-$ python -m powergrid.server
+$ python -m powergrid.server america
 ```
 
-to run the development server.
+to run the development server. Supported maps are america and china.

@@ -1,3 +1,4 @@
+import sys
 import json
 import os.path
 
@@ -13,7 +14,13 @@ HERE = os.path.dirname(__file__)
 
 
 class PlayerHandler(WebSocketHandler):
-    game = game.Game("america")
+    accepted_maps = ["america", "china"]
+    try:
+        mapname = sys.argv[1]
+        assert mapname in accepted_maps
+    except:
+        mapname = "america"
+    game = game.Game(mapname)
 
     def open(self):
         pass
